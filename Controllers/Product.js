@@ -1,14 +1,16 @@
 const db = require("../config")
+
 db.run(`
     CREATE TABLE IF NOT EXISTS products (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
         stock INTEGER NOT NULL,
-        price REAL NOT NULL
+        price REAL NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )
 `);
 
-// 🔹 **GET request - Fetch all products**
 const reviewProducts = (req, res) => {
     db.all("SELECT * FROM products", [], (err, rows) => {
         if (err) {
@@ -20,8 +22,7 @@ const reviewProducts = (req, res) => {
 
 // 🔹 **GET request - Fetch a single product by ID**
 const reviewProductsByProductID =  (req, res) => {
-    const { id } = req.params;
-    db.get("SELECT * FROM products WHERE id = ?", [id], (err, row) => {
+    db.get("SELECT * FROM products WHERE id = ?", [req.body.id], (err, row) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
@@ -31,13 +32,9 @@ const reviewProductsByProductID =  (req, res) => {
 
 // 🔹 **POST request - Add a new product**
 const createProduct = (req, res) => {
-    const { name, stock, price } = req.body;
-    if (!name || stock == null || price == null) {
-        return res.status(400).json({ error: "Missing required fields" });
-    }
 
     db.run("INSERT INTO products (name, stock, price) VALUES (?, ?, ?)", 
-        [name, stock, price], 
+        [req.body.name, req.body.stock, req.body.price], 
         function (err) {
             if (err) {
                 return res.status(500).json({ error: err.message });
@@ -49,14 +46,7 @@ const createProduct = (req, res) => {
 
 // 🔹 **PUT request - Update product stock**
 const updateProduct = (req, res) => {
-    const { id } = req.params;
-    const { stock } = req.body;
-
-    if (stock == null) {
-        return res.status(400).json({ error: "Missing stock value" });
-    }
-
-    db.run("UPDATE products SET stock = ? WHERE id = ?", [stock, id], function (err) {
+    db.run("UPDATE products SET name = ? ,stock = ?, price = ? WHERE id = ?", [req.body.name, req.body.stock, req.body.price, req.body.id], function (err) {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
@@ -66,8 +56,7 @@ const updateProduct = (req, res) => {
 
 // 🔹 **DELETE request - Remove a product**
 const deleteProduct = (req, res) => {
-    const { id } = req.params;
-    db.run("DELETE FROM products WHERE id = ?", [id], function (err) {
+    db.run("DELETE FROM products WHERE id = ?", [req.paramas.id], function (err) {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
