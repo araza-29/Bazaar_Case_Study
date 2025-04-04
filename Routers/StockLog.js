@@ -3,7 +3,8 @@ const stockLog = require("../Controllers/StockLog");
 
 router.post("/CreateStockLog", stockLog.createStockLog);
 router.get("/ReviewStockLogByProductId", stockLog.reviewStockLogByProductId);
-router.get("/DeleteStockLog/:id", stockLog.deleteStockLog);
+router.delete("/DeleteStockLog/:id", stockLog.deleteStockLog);
 router.put("/UpdateStockLog", stockLog.updateStockLog);
+router.get("/ReviewStockLogs", stockLog.reviewStockLogs);
 
 module.exports = router;

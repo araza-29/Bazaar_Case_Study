@@ -4,7 +4,7 @@ db.run(`
     CREATE TABLE IF NOT EXISTS supplier (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name VARCHAR NOT NULL,
-        contactNo VARCHAR NOT NULL,
+        contactNo VARCHAR NOT NULL UNIQUE,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )
@@ -15,7 +15,7 @@ const reviewSuppliers = (req, res) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
-        res.json(rows);
+        res.status(200).json(rows);
     });
 };
 
@@ -36,7 +36,7 @@ const createSupplier = (req, res) => {
             if (err) {
                 return res.status(500).json({ error: err.message });
             }
-            res.json({ id: this.lastID, name, stock, price });
+            res.status(200).json({message: "Supplier Created" });
         }
     );
 };
@@ -46,16 +46,16 @@ const updateSupplier = (req, res) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
-        res.json({ message: "Supplier updated", changes: this.changes });
+        res.status(200).json({message: "Supplier updated"});
     });
 };
 
 const deleteSupplier = (req, res) => {
-    db.run("DELETE FROM supplier WHERE id = ?", [req.paramas.id], function (err) {
+    db.run("DELETE FROM supplier WHERE id = ?", [req.params.id], function (err) {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
-        res.json({ message: "Supplier deleted", changes: this.changes });
+        res.status(200).json({message: "Supplier deleted"});
     });
 };
 

@@ -21,6 +21,15 @@ const reviewStockLogByProductId = (req, res) => {
     });
 };
 
+const reviewStockLogs = (req, res) => {
+    db.all("SELECT * FROM StockLog", [], (err, rows) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json(rows);
+    });
+};
+
 const createStockLog = (req, res) => {
 
     db.run("INSERT INTO StockLog (product_id, quantity, reason) VALUES (?, ?, ?)", 
@@ -29,7 +38,7 @@ const createStockLog = (req, res) => {
             if (err) {
                 return res.status(500).json({ error: err.message });
             }
-            res.json({ id: this.lastID, name, stock, price });
+            res.status(200).json({ message: "StockLog added" });
         }
     );
 };
@@ -45,7 +54,7 @@ const updateStockLog = (req, res) => {
 };
 
 const deleteStockLog = (req, res) => {
-    db.run("DELETE FROM StockLog WHERE id = ?", [req.paramas.id], function (err) {
+    db.run("DELETE FROM StockLog WHERE id = ?", [req.params.id], function (err) {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
@@ -56,6 +65,7 @@ const deleteStockLog = (req, res) => {
 module.exports = {
     reviewStockLogByProductId,
     deleteStockLog,
+    reviewStockLogs,
     updateStockLog,
     createStockLog
 }
