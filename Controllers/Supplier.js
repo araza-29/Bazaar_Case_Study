@@ -6,7 +6,7 @@ db.run(`
         name VARCHAR NOT NULL,
         contactNo VARCHAR NOT NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )
 `);
 
