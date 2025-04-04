@@ -6,8 +6,10 @@ db.run(`
         name TEXT NOT NULL,
         stock INTEGER NOT NULL,
         price REAL NOT NULL,
+        supplier_id INTEGER NOT NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (supplier_id) REFERENCES supplier(id) ON DELETE CASCADE
     )
 `);
 
@@ -20,7 +22,6 @@ const reviewProducts = (req, res) => {
     });
 };
 
-// 🔹 **GET request - Fetch a single product by ID**
 const reviewProductsByProductID =  (req, res) => {
     db.get("SELECT * FROM products WHERE id = ?", [req.body.id], (err, row) => {
         if (err) {
@@ -30,11 +31,10 @@ const reviewProductsByProductID =  (req, res) => {
     });
 };
 
-// 🔹 **POST request - Add a new product**
 const createProduct = (req, res) => {
 
-    db.run("INSERT INTO products (name, stock, price) VALUES (?, ?, ?)", 
-        [req.body.name, req.body.stock, req.body.price], 
+    db.run("INSERT INTO products (name, stock, price, supplier_id) VALUES (?, ?, ?, ?, ?)", 
+        [req.body.name, req.body.stock, req.body.price, req.body.supplier_id], 
         function (err) {
             if (err) {
                 return res.status(500).json({ error: err.message });
@@ -44,9 +44,8 @@ const createProduct = (req, res) => {
     );
 };
 
-// 🔹 **PUT request - Update product stock**
 const updateProduct = (req, res) => {
-    db.run("UPDATE products SET name = ? ,stock = ?, price = ? WHERE id = ?", [req.body.name, req.body.stock, req.body.price, req.body.id], function (err) {
+    db.run("UPDATE products SET name = ? ,stock = ?, price = ?, supplier_id = ? WHERE id = ?", [req.body.name, req.body.stock, req.body.price, req.body.supplier_id, req.body.id], function (err) {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
@@ -54,7 +53,6 @@ const updateProduct = (req, res) => {
     });
 };
 
-// 🔹 **DELETE request - Remove a product**
 const deleteProduct = (req, res) => {
     db.run("DELETE FROM products WHERE id = ?", [req.paramas.id], function (err) {
         if (err) {

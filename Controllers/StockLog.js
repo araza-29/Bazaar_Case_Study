@@ -1,7 +1,7 @@
 const db = require("../config")
 
 db.run(`
-    CREATE TABLE IF NOT EXISTS StockMovement (
+    CREATE TABLE IF NOT EXISTS StockLog (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         product_id INTEGER NOT NULL,
         quantity INTEGER NOT NULL,
@@ -12,8 +12,8 @@ db.run(`
     );
 `);
 
-const reviewStockMovementByProductId = (req, res) => {
-    db.all("SELECT * FROM StockMovement where product_id = ?", [req.body.product_id], (err, rows) => {
+const reviewStockLogByProductId = (req, res) => {
+    db.all("SELECT * FROM StockLog where product_id = ?", [req.body.product_id], (err, rows) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
@@ -21,10 +21,9 @@ const reviewStockMovementByProductId = (req, res) => {
     });
 };
 
-// 🔹 **POST request - Add a new product**
-const createStockMovement = (req, res) => {
+const createStockLog = (req, res) => {
 
-    db.run("INSERT INTO StockMovement (product_id, quantity, reason) VALUES (?, ?, ?)", 
+    db.run("INSERT INTO StockLog (product_id, quantity, reason) VALUES (?, ?, ?)", 
         [req.body.product_id, req.body.quantity, req.body.reason], 
         function (err) {
             if (err) {
@@ -35,20 +34,18 @@ const createStockMovement = (req, res) => {
     );
 };
 
-// 🔹 **PUT request - Update product stock**
-const updateStockMovement = (req, res) => {
+const updateStockLog = (req, res) => {
 
-    db.run("UPDATE StockMovement SET quantity = ?, reason = ? WHERE id = ?", [req.body.quantity, req.body.reason, req.body.id], function (err) {
+    db.run("UPDATE StockLog SET quantity = ?, reason = ? WHERE id = ?", [req.body.quantity, req.body.reason, req.body.id], function (err) {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
-        res.json({ message: "Quantity updated", changes: this.changes });
+        res.json({ message: "StockLog updated", changes: this.changes });
     });
 };
 
-// 🔹 **DELETE request - Remove a product**
-const deleteStockMovement = (req, res) => {
-    db.run("DELETE FROM StockMovement WHERE id = ?", [req.paramas.id], function (err) {
+const deleteStockLog = (req, res) => {
+    db.run("DELETE FROM StockLog WHERE id = ?", [req.paramas.id], function (err) {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
@@ -57,8 +54,8 @@ const deleteStockMovement = (req, res) => {
 };
 
 module.exports = {
-    reviewStockMovementByProductId,
-    deleteStockMovement,
-    updateStockMovement,
-    createStockMovement
+    reviewStockLogByProductId,
+    deleteStockLog,
+    updateStockLog,
+    createStockLog
 }
