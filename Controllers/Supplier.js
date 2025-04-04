@@ -1,62 +1,30 @@
-const db = require("../config")
+const db = require("../Model")
+const supplier = db.supplier
 
-db.run(`
-    CREATE TABLE IF NOT EXISTS supplier (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name VARCHAR NOT NULL,
-        contactNo VARCHAR NOT NULL UNIQUE,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-`);
-
-const reviewSuppliers = (req, res) => {
-    db.all("SELECT * FROM supplier", [], (err, rows) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.status(200).json(rows);
-    });
+const reviewSuppliers = async(req, res) => {
+    const suppliers = await supplier.findAll({})
+    res.json({code: 200, data: suppliers})
 };
 
-const reviewSupplierBySupplierID =  (req, res) => {
-    db.get("SELECT * FROM supplier WHERE id = ?", [req.body.id], (err, row) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json(row || { message: "Supplier not found" });
-    });
+const reviewSupplierBySupplierID =  async(req, res) => {
+    const suppliers = await supplier.findOne({id: req.body.id})
+    res.json({code: 200, data: suppliers})
 };
 
-const createSupplier = (req, res) => {
-
-    db.run("INSERT INTO supplier (name, contactNo) VALUES (?, ?)", 
-        [req.body.name, req.body.contactNo], 
-        function (err) {
-            if (err) {
-                return res.status(500).json({ error: err.message });
-            }
-            res.status(200).json({message: "Supplier Created" });
-        }
-    );
+const createSupplier = async(req, res) => {
+    const suppliers = await supplier.create({name: req.body.name, contactNo: req.body.contactNo})
+    res.json({code: 200, data: suppliers})
+    
 };
 
-const updateSupplier = (req, res) => {
-    db.run("UPDATE supplier SET name = ?, contactNo = ? WHERE id = ?", [req.body.name, req.body.contactNo, req.body.id], function (err) {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.status(200).json({message: "Supplier updated"});
-    });
+const updateSupplier = async(req, res) => {
+    const suppliers = await supplier.update(req.body, {where: {id: req.body.id}})
+    res.json({code: 200, data: suppliers})
 };
 
-const deleteSupplier = (req, res) => {
-    db.run("DELETE FROM supplier WHERE id = ?", [req.params.id], function (err) {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.status(200).json({message: "Supplier deleted"});
-    });
+const deleteSupplier = async(req, res) => {
+    const suppliers = await supplier.destroy({where: {id: req.params.id}})
+    res.json({code: 200, data: suppliers})
 };
 
 module.exports = {

@@ -1,71 +1,39 @@
-const db = require("../config")
+const db = require("../Model")
+const stockLog = db.stockLog
 
-db.run(`
-    CREATE TABLE IF NOT EXISTS StockLog (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        product_id INTEGER NOT NULL,
-        quantity INTEGER NOT NULL,
-        reason STRING NOT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (product_id) REFERENCES products(id)
-    );
-`);
-
-const reviewStockLogByProductId = (req, res) => {
-    db.all("SELECT * FROM StockLog where product_id = ?", [req.body.product_id], (err, rows) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json(rows);
-    });
+const reviewStockLogs = async(req, res) => {
+    const stockLogs = await stockLog.findAll({})
+    res.json({code: 200, data: stockLogs})
 };
 
-const reviewStockLogs = (req, res) => {
-    db.all("SELECT * FROM StockLog", [], (err, rows) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json(rows);
-    });
+const reviewStockLogsByStockLogID = async(req, res) => {
+    const stockLogs = await stockLog.findOne({where:{id:req.body.id}})
+    res.json({code: 200, data: stockLogs})
 };
 
-const createStockLog = (req, res) => {
-
-    db.run("INSERT INTO StockLog (product_id, quantity, reason) VALUES (?, ?, ?)", 
-        [req.body.product_id, req.body.quantity, req.body.reason], 
-        function (err) {
-            if (err) {
-                return res.status(500).json({ error: err.message });
-            }
-            res.status(200).json({ message: "StockLog added" });
-        }
-    );
+const createStockLog = async(req, res) => {
+    const stockLogInfo = {
+        quantity: req.body.quantity,
+        reason: req.body.reason
+    }
+    const stockLogs = await stockLog.create(stockLogInfo)
+    res.json({code: 200, data: stockLogs})
 };
 
-const updateStockLog = (req, res) => {
-
-    db.run("UPDATE StockLog SET quantity = ?, reason = ? WHERE id = ?", [req.body.quantity, req.body.reason, req.body.id], function (err) {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json({ message: "StockLog updated", changes: this.changes });
-    });
+const updateStockLog = async(req, res) => {
+    const stockLogs = await stockLog.update(req.body, {where: {id: req.body.id }})
+    res.json({code: 200, data: stockLogs})
 };
 
-const deleteStockLog = (req, res) => {
-    db.run("DELETE FROM StockLog WHERE id = ?", [req.params.id], function (err) {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json({ message: "Quantity deleted", changes: this.changes });
-    });
+const deleteStockLog = async(req, res) => {
+    const stockLogs = await stockLog.destroy({status: false},{where:{id:req.params.id}})
+    res.json(200).send("stockLog deleted !")
 };
 
 module.exports = {
-    reviewStockLogByProductId,
-    deleteStockLog,
     reviewStockLogs,
+    reviewStockLogsByStockLogID,
+    deleteStockLog,
     updateStockLog,
     createStockLog
 }

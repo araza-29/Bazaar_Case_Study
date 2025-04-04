@@ -1,65 +1,42 @@
-const db = require("../config")
+const db = require("../Model")
+const product = db.product
 
-db.run(`
-    CREATE TABLE IF NOT EXISTS products (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name VARCHAR NOT NULL UNIQUE,
-        stock INTEGER NOT NULL,
-        price REAL NOT NULL,
-        supplier_id INTEGER NOT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (supplier_id) REFERENCES supplier(id)
-    )
-`);
-
-const reviewProducts = (req, res) => {
-    db.all("SELECT * FROM products", [], (err, rows) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json(rows);
-    });
+const reviewProducts = async(req, res) => {
+    const products = await product.findAll({})
+    res.json({code: 200, data: products})
 };
 
-const reviewProductsByProductID =  (req, res) => {
-    db.get("SELECT * FROM products WHERE id = ?", [req.body.id], (err, row) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json(row || { message: "Product not found" });
-    });
+const reviewProductsByProductID = async(req, res) => {
+    const products = await product.findOne({where:{id:req.body.id}})
+    res.json({code: 200, data: products})
 };
 
-const createProduct = (req, res) => {
+const createProduct = async (req, res) => {
+    try {
+        const { name, stock, price, supplier_id } = req.body;
 
-    db.run("INSERT INTO products (name, stock, price, supplier_id) VALUES (?, ?, ?, ?)", 
-        [req.body.name, req.body.stock, req.body.price, req.body.supplier_id], 
-        function (err) {
-            if (err) {
-                return res.status(500).json({ error: err.message });
-            }
-            res.status(200).json({message: "Product created"});
-        }
-    );
+        const products = await product.create({
+            name,
+            stock,
+            price,
+            supplier_id
+        });
+
+        res.json({ code: 200, data: products });
+    } catch (error) {
+        console.error("Create Product Error:", error); // log to terminal
+        res.status(500).json({ code: 500, message: error.message });
+    }
 };
 
-const updateProduct = (req, res) => {
-    db.run("UPDATE products SET name = ? ,stock = ?, price = ?, supplier_id = ? WHERE id = ?", [req.body.name, req.body.stock, req.body.price, req.body.supplier_id, req.body.id], function (err) {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json({ message: "Product updated", changes: this.changes });
-    });
+const updateProduct = async(req, res) => {
+    const products = await product.update(req.body, {where: {id: req.body.id }})
+    res.json({code: 200, data: products})
 };
 
-const deleteProduct = (req, res) => {
-    db.run("DELETE FROM products WHERE id = ?", [req.params.id], function (err) {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json({ message: "Product deleted", changes: this.changes });
-    });
+const deleteProduct = async(req, res) => {
+    const products = await product.destroy({status: false},{where:{id:req.params.id}})
+    res.json(200).send("product deleted !")
 };
 
 module.exports = {

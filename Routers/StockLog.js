@@ -2,7 +2,7 @@ const router = require("express").Router();
 const stockLog = require("../Controllers/StockLog");
 
 router.post("/CreateStockLog", stockLog.createStockLog);
-router.get("/ReviewStockLogByProductId", stockLog.reviewStockLogByProductId);
+router.get("/ReviewStockLogByProductId", stockLog.reviewStockLogsByStockLogID);
 router.delete("/DeleteStockLog/:id", stockLog.deleteStockLog);
 router.put("/UpdateStockLog", stockLog.updateStockLog);
 router.get("/ReviewStockLogs", stockLog.reviewStockLogs);

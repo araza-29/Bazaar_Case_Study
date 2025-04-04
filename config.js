@@ -1,11 +1,7 @@
-const sqlite3 = require("sqlite3").verbose();
-
-const db = new sqlite3.Database("inventory.db", (err) => {
-    if (err) {
-        console.error("Database connection error:", err.message);
-    } else {
-        console.log("Connected to SQLite database.");
-    }
-});
-
-module.exports = db;
+module.exports = {
+    HOST: 'localhost',
+    USER: 'postgres',
+    PASSWORD: '011539',
+    DB: 'Bazaar',
+    dialect: 'postgres'
+}
