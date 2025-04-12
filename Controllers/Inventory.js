@@ -1,17 +1,17 @@
 const db = require("../Model")
 const product = db.product
 
-const reviewProducts = async(req, res) => {
+const reviewInventorys = async(req, res) => {
     const products = await product.findAll({})
     res.json({code: 200, data: products})
 };
 
-const reviewProductsByProductID = async(req, res) => {
+const reviewInventoryByInventoryID = async(req, res) => {
     const products = await product.findOne({where:{id:req.body.id}})
     res.json({code: 200, data: products})
 };
 
-const createProduct = async (req, res) => {
+const createInventory = async (req, res) => {
     try {
         const { name, stock, price, supplier_id } = req.body;
 
@@ -29,20 +29,20 @@ const createProduct = async (req, res) => {
     }
 };
 
-const updateProduct = async(req, res) => {
+const updateInventory = async(req, res) => {
     const products = await product.update(req.body, {where: {id: req.body.id }})
     res.json({code: 200, data: products})
 };
 
-const deleteProduct = async(req, res) => {
+const deleteInventory = async(req, res) => {
     const products = await product.destroy({status: false},{where:{id:req.params.id}})
     res.json(200).send("product deleted !")
 };
 
 module.exports = {
-    reviewProducts,
-    reviewProductsByProductID,
-    deleteProduct,
-    updateProduct,
-    createProduct
+    reviewInventorys,
+    reviewInventoryByInventoryID,
+    deleteInventory,
+    updateInventory,
+    createInventory
 }
