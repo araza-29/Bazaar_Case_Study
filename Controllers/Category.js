@@ -1,48 +1,45 @@
 const db = require("../Model")
-const product = db.product
+const category = db.category
 
-const reviewProducts = async(req, res) => {
-    const products = await product.findAll({})
-    res.json({code: 200, data: products})
+const reviewCategory = async(req, res) => {
+    const categorys = await category.findAll({})
+    res.json({code: 200, data: categorys})
 };
 
-const reviewProductsByProductID = async(req, res) => {
-    const products = await product.findOne({where:{id:req.body.id}})
-    res.json({code: 200, data: products})
+const reviewCategoryByCategoryID = async(req, res) => {
+    const categorys = await category.findOne({where:{id:req.body.id}})
+    res.json({code: 200, data: categorys})
 };
 
-const createProduct = async (req, res) => {
+const createCategory = async (req, res) => {
     try {
-        const { name, stock, price, supplier_id } = req.body;
+        const { name } = req.body;
 
-        const products = await product.create({
-            name,
-            stock,
-            price,
-            supplier_id
+        const categorys = await category.create({
+            name
         });
 
-        res.json({ code: 200, data: products });
+        res.json({ code: 200, data: categorys });
     } catch (error) {
         console.error("Create Product Error:", error); // log to terminal
         res.status(500).json({ code: 500, message: error.message });
     }
 };
 
-const updateProduct = async(req, res) => {
-    const products = await product.update(req.body, {where: {id: req.body.id }})
-    res.json({code: 200, data: products})
+const updateCategory = async(req, res) => {
+    const categorys = await category.update(req.body, {where: {id: req.body.id }})
+    res.json({code: 200, data: categorys})
 };
 
-const deleteProduct = async(req, res) => {
-    const products = await product.destroy({status: false},{where:{id:req.params.id}})
+const deleteCategory = async(req, res) => {
+    const categorys = await category.destroy({status: false},{where:{id:req.params.id}})
     res.json(200).send("product deleted !")
 };
 
 module.exports = {
-    reviewProducts,
-    reviewProductsByProductID,
-    deleteProduct,
-    updateProduct,
-    createProduct
+    reviewCategory,
+    reviewCategoryByCategoryID,
+    deleteCategory,
+    updateCategory,
+    createCategory
 }
