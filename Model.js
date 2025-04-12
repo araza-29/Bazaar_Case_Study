@@ -33,7 +33,8 @@ db.supplier = require('./Models/Supplier')(sequelize,DataTypes)
 db.user = require('./Models/User')(sequelize,DataTypes)
 db.store = require('./Models/Store')(sequelize,DataTypes)
 db.inventory = require('./Models/Inventory')(sequelize,DataTypes)
-db.category= require('./Models/Category')(sequelize,DataTypes)
+db.category = require('./Models/Category')(sequelize,DataTypes)
+db.productMapping = require('./Models/ProductMapping')(sequelize,DataTypes)
 
 // Product
 db.supplier.hasMany(db.product,{
