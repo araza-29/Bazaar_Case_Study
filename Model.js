@@ -30,6 +30,10 @@ db.sequelize.sync({ force: true })
 db.product = require('./Models/Product')(sequelize,DataTypes)
 db.stockLog = require('./Models/StockLog')(sequelize,DataTypes)
 db.supplier = require('./Models/Supplier')(sequelize,DataTypes)
+db.user = require('./Models/User')(sequelize,DataTypes)
+db.store = require('./Models/Store')(sequelize,DataTypes)
+db.inventory = require('./Models/Inventory')(sequelize,DataTypes)
+db.category= require('./Models/Category')(sequelize,DataTypes)
 
 // Product
 db.supplier.hasMany(db.product,{
