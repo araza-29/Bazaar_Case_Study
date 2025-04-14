@@ -1,31 +1,15 @@
 const Sequelize = require('sequelize')
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('productMapping', {
+    return sequelize.define('role', {
         id: {
             autoIncrement: true,
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true
         },
-        product_id: {
-            type: DataTypes.INTEGER,
+        name: {
+            type: DataTypes.STRING,
             allowNull: false
-        },
-        inventory_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false
-        },
-        supplier_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false
-        },
-        retail_price: {
-            type: DataTypes.DECIMAL(10, 2),
-            allowNull: false
-        },
-        purchase_price: {
-            type:DataTypes.DECIMAL(10, 2),
-            allowNUll: false
         },
         createdAt: {
             type: DataTypes.DATE,
@@ -40,7 +24,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     {
         sequelize,
-        tableName: 'productMapping',
+        tableName: 'role',
         timestamps: true
     })
 }

@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize')
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('productMapping', {
+    return sequelize.define('category', {
         id: {
             autoIncrement: true,
             type: DataTypes.INTEGER,
@@ -24,7 +24,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     {
         sequelize,
-        tableName: 'productMapping',
+        tableName: 'category',
         timestamps: true
     })
 }

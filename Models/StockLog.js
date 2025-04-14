@@ -15,8 +15,20 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        reason: {
+        details: {
             type: DataTypes.STRING,
+            allowNull: false
+        },
+        verifiedBy: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        orderedBy: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        price: {
+            type: DataTypes.DECIMAL(10, 2),
             allowNull: false
         },
         createdAt: {
