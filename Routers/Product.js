@@ -1,10 +1,11 @@
 const router = require("express").Router();
 const product = require("../Controllers/Product");
+const authenticate = require("../authenticator")
 
-router.post("/CreateProduct", product.createProduct);
-router.get("/ReviewProducts", product.reviewProducts);
-router.get("/ReviewProductByProductID", product.reviewProductsByProductID);
-router.put("/UpdateProduct", product.updateProduct);
-router.delete("/DeleteProduct/:id", product.deleteProduct);
+router.post("/CreateProduct",authenticate, product.createProduct);
+router.get("/ReviewProducts",authenticate, product.reviewProducts);
+router.get("/ReviewProductByProductID",authenticate, product.reviewProductsByProductID);
+router.put("/UpdateProduct",authenticate, product.updateProduct);
+router.delete("/DeleteProduct/:id",authenticate, product.deleteProduct);
 
 module.exports = router;

@@ -1,10 +1,11 @@
 const router = require("express").Router();
 const stockLog = require("../Controllers/StockLog");
+const authenticate = require("../authenticator")
 
-router.post("/CreateStockLog", stockLog.createStockLog);
-router.get("/ReviewStockLogByProductId", stockLog.reviewStockLogsByStockLogID);
-router.delete("/DeleteStockLog/:id", stockLog.deleteStockLog);
-router.put("/UpdateStockLog", stockLog.updateStockLog);
-router.get("/ReviewStockLogs", stockLog.reviewStockLogs);
+router.post("/CreateStockLog",authenticate, stockLog.createStockLog);
+router.get("/ReviewStockLogByProductId",authenticate, stockLog.reviewStockLogsByStockLogID);
+router.delete("/DeleteStockLog/:id",authenticate, stockLog.deleteStockLog);
+router.put("/UpdateStockLog",authenticate, stockLog.updateStockLog);
+router.get("/ReviewStockLogs",authenticate, stockLog.reviewStockLogs);
 
 module.exports = router;

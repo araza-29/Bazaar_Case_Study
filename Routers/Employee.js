@@ -1,10 +1,11 @@
 const router = require("express").Router();
 const Employee = require("../Controllers/Employee");
+const authenticate = require("../authenticator")
 
-router.post("/CreateEmployee", Employee.createEmployee);
-router.get("/ReviewEmployees", Employee.reviewEmployees);
-router.get("/ReviewEmployeeByEmployeeID", Employee.reviewEmployeeByEmployeeID);
-router.put("/UpdateEmployee", Employee.updateEmployee);
-router.delete("/DeleteEmployee/:id", Employee.deleteEmployee);
+router.post("/CreateEmployee",authenticate, Employee.createEmployee);
+router.get("/ReviewEmployees",authenticate, Employee.reviewEmployees);
+router.get("/ReviewEmployeeByEmployeeID",authenticate, Employee.reviewEmployeeByEmployeeID);
+router.put("/UpdateEmployee",authenticate, Employee.updateEmployee);
+router.delete("/DeleteEmployee/:id",authenticate, Employee.deleteEmployee);
 
 module.exports = router;

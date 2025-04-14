@@ -1,10 +1,11 @@
 const router = require("express").Router();
 const store = require("../Controllers/Store");
+const authenticate = require("../authenticator")
 
-router.post("/CreateStore", store.createStore);
-router.get("/ReviewStores", store.reviewStore);
-router.get("/ReviewStoreByStoreID", store.reviewStoreByStoreID);
-router.put("/UpdateStore", store.updateStores);
-router.delete("/DeleteStore/:id", store.deleteStores);
+router.post("/CreateStore",authenticate, store.createStore);
+router.get("/ReviewStores",authenticate, store.reviewStore);
+router.get("/ReviewStoreByStoreID",authenticate, store.reviewStoreByStoreID);
+router.put("/UpdateStore",authenticate, store.updateStores);
+router.delete("/DeleteStore/:id",authenticate, store.deleteStores);
 
 module.exports = router;

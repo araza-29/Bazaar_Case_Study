@@ -1,4 +1,6 @@
 const db = require("../Model")
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const Employee = db.employee
 
 const reviewEmployees = async(req, res) => {
@@ -65,6 +67,24 @@ const deleteEmployee = async(req, res) => {
         res.status(500).json({code: 500, message: error})
     }
 };
+
+
+const login = async (req, res) => {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
+
+    // Sign JWT Token
+    const token = jwt.sign({ userId: user.id }, 'your_secret_key', { expiresIn: '1h' });
+
+    res.status(200).json({ token });
+};
+
 
 module.exports = {
     reviewEmployees,
