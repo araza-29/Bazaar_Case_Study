@@ -11,6 +11,10 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.INTEGER,
             allowNull: false
         },
+        inventory_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
         stock: {
             type: DataTypes.INTEGER,
             allowNull: false

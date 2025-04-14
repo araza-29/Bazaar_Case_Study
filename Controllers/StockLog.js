@@ -33,7 +33,7 @@ const reviewStockLogsByStockLogID = async(req, res) => {
 
 const createStockLog = async(req, res) => {
     try{
-        const stockLogs = await stockLog.create({product_id: req.body.product_id, stock: req.body.stock, details: req.body.details, verifiedBy: req.body.verifiedBy, orderedBy: req.body.orderedBy, price: req.body.price})
+        const stockLogs = await stockLog.create({product_id: req.body.product_id,inventory_id: req.body.inventory_id,stock: req.body.stock, details: req.body.details, verifiedBy: req.body.verifiedBy, orderedBy: req.body.orderedBy, price: req.body.price})
         if(stockLogs){
             res.status(200).json({code: 200, data: stockLogs})
         }

@@ -3,6 +3,21 @@ const ProductMapping = db.productMapping
 const inventory = db.inventory
 const product = db.product
 
+ProductMapping.addHook('afterUpdate', async (ProductMapping, options) => {
+    const changed = ProductMapping.changed();
+  
+    if (changed.includes('stock')) {
+      await StockLog.create({
+        inventory_id: inventory.id,
+        product_id: inventory.product_id,
+        stock: inventory.stock,
+        details: "stock_in",
+        type: inventory.stock > inventory._previousDataValues.stock ? 'stock_in' : 'stock_out',
+        timestamp: new Date()
+      });
+    }
+  });
+
 const reviewProductMapping = async(req, res) => {
     try{
         const ProductMappings = await ProductMapping.findAll({})

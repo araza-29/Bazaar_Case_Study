@@ -1,6 +1,15 @@
 const express = require("express");
-
+const rateLimit = require('express-rate-limit');
 const bodyParser = require("body-parser");
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, 
+    max: 100,
+    message: 'Too many requests from this IP, please try again after 15 minutes',
+    headers: true,
+  });
+
+
 const Product = require("./Routers/Product")
 const Supplier = require("./Routers/Supplier")
 const StockLog = require("./Routers/StockLog")
@@ -13,20 +22,21 @@ const Employee = require("./Routers/Employee")
 
 const app = express();
 
+
 // Middleware
 app.use(bodyParser.json());
 
 // Connect to SQLite database (or create it if it doesn't exist)
 
-app.use("/Product", Product)
-app.use("/Supplier", Supplier)
-app.use("/Category", Category)
-app.use("/Inventory", Inventory)
-app.use("/ProductMapping", ProductMapping)
-app.use("/Role", Role)
-app.use("/StockLog", StockLog)
-app.use("/Store", Store)
-app.use("/Employee", Employee)
+app.use("/Product", limiter, Product);
+app.use("/Supplier", limiter, Supplier);
+app.use("/Category", limiter, Category);
+app.use("/Inventory", limiter, Inventory);
+app.use("/ProductMapping", limiter, ProductMapping);
+app.use("/Role", limiter, Role);
+app.use("/StockLog", limiter, StockLog);
+app.use("/Store", limiter, Store);
+app.use("/Employee", limiter, Employee);
 
 app.listen(3000, () => {
     console.log(`Server running`);
