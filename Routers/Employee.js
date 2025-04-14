@@ -23,5 +23,6 @@ router.get("/ReviewEmployees",authenticate, Employee.reviewEmployees);
 router.get("/ReviewEmployeeByEmployeeID",authenticate, Employee.reviewEmployeeByEmployeeID);
 router.put("/UpdateEmployee",authenticate, Employee.updateEmployee);
 router.delete("/DeleteEmployee/:id",authenticate, Employee.deleteEmployee);
+router.delete("/login", Employee.login);
 
 module.exports = router;

@@ -8,11 +8,10 @@ ProductMapping.addHook('afterUpdate', async (ProductMapping, options) => {
   
     if (changed.includes('stock')) {
       await StockLog.create({
-        inventory_id: inventory.id,
-        product_id: inventory.product_id,
-        stock: inventory.stock,
-        details: "stock_in",
-        type: inventory.stock > inventory._previousDataValues.stock ? 'stock_in' : 'stock_out',
+        inventory_id: db.productMapping.id,
+        product_id: db.productMapping.product_id,
+        stock: db.productMapping.stock,
+        details: db.productMapping.stock > inventory._previousDataValues.stock ? 'stock_in' : 'stock_out',
         timestamp: new Date()
       });
     }

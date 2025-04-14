@@ -91,5 +91,6 @@ module.exports = {
     reviewEmployeeByEmployeeID,
     deleteEmployee,
     updateEmployee,
-    createEmployee
+    createEmployee,
+    login
 }
