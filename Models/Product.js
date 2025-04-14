@@ -11,17 +11,9 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             allowNull: false
         },
-        stock: {
+        category_id: {
             type: DataTypes.INTEGER,
-            allowNull: false
-        },
-        price: {
-            type: DataTypes.INTEGER,
-            allowNull: false
-        },
-        supplier_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false
+            allowFalse: null
         },
         createdAt: {
             type: DataTypes.DATE,

@@ -2,22 +2,38 @@ const db = require("../Model")
 const ProductMapping = db.productMapping
 
 const reviewProductMapping = async(req, res) => {
-    const ProductMappings = await ProductMapping.findAll({})
-    res.json({code: 200, data: ProductMappings})
+    try{
+        const ProductMappings = await ProductMapping.findAll({})
+        if(ProductMappings){
+            res.status(200).json({code: 200, data: ProductMappings})
+        }
+        else {
+            res.status(404).json({code: 404, data: "ProductMappings not found"})
+        }
+    }
+    catch(error) {
+        res.status(500).json({code: 500, message: error})
+    }
 };
 
 const reviewProductMappingByProductMappingID = async(req, res) => {
-    const ProductMappings = await ProductMapping.findOne({where:{id:req.body.id}})
-    res.json({code: 200, data: ProductMappings})
+    try{
+        const ProductMappings = await ProductMapping.findOne({where:{id:req.body.id}})
+        if(ProductMappings){
+            res.status(200).json({code: 200, data: ProductMappings})
+        }
+        else {
+            res.status(404).json({code: 404, data: "ProductMappings not found"})
+        }
+    }
+    catch(error) {
+        res.status(500).json({code: 500, message: error})
+    }
 };
 
 const createProductMapping = async (req, res) => {
     try {
-        const { product_id, inventory_id, supplier_id } = req.body;
-
-        const ProductMappings = await ProductMapping.create({
-            product_id, inventory_id, supplier_id
-        });
+        const ProductMappings = await ProductMapping.create({product_id: req.body.product_id, inventory_id: req.body.inventory_id, supplier_id: req.body.supplier_id, retail_price: req.body.retail_price, purchase_price: req.body.purchase_price});
 
         res.json({ code: 200, data: ProductMappings });
     } catch (error) {
@@ -27,13 +43,27 @@ const createProductMapping = async (req, res) => {
 };
 
 const updateProductMapping = async(req, res) => {
-    const ProductMappings = await ProductMapping.update(req.body, {where: {id: req.body.id }})
-    res.json({code: 200, data: ProductMappings})
+    try{
+        const ProductMappings = await ProductMapping.update(req.body, {where: {id: req.body.id }})
+        if(ProductMappings){
+            res.status(200).json({code: 200, data: ProductMappings})
+        }
+    }
+    catch(error) {
+        res.status(500).json({code: 500, message: error})
+    }
 };
 
 const deleteProductMapping = async(req, res) => {
-    const ProductMappings = await ProductMapping.destroy({status: false},{where:{id:req.params.id}})
-    res.json(200).send("product deleted !")
+    try{
+        const ProductMappings = await ProductMapping.destroy({status: false},{where:{id:req.params.id}})
+        if(ProductMappings){
+            res.status(200).json({code: 200, data: ProductMappings})
+        }
+    }
+    catch(error) {
+        res.status(500).json({code: 500, message: error})
+    }
 };
 
 module.exports = {

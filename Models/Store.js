@@ -11,12 +11,8 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             allowNull: false
         },
-        Location: {
+        location: {
             type: DataTypes.STRING,
-            allowNull: false
-        },
-        owner_id: {
-            type: DataTypes.INTEGER,
             allowNull: false
         },
         createdAt: {
